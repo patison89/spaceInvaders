@@ -25,7 +25,8 @@ playerX_change = 0
 enemyImg = pygame.image.load('enemy.png')
 enemyX = random.randint(0, 800)
 enemyY = random.randint(0, 150)
-enemyX_change = 0
+enemyX_change = 0.6
+enemyY_change = 40
 
 # Bullet
 
@@ -80,6 +81,17 @@ while running:
         playerX = 0
     elif playerX >= 736:
         playerX = 736
+
+
+    # Enemy Movement
+    enemyX += enemyX_change
+
+    if enemyX <=0:
+        enemyX_change = 0.6
+        enemyY += enemyY_change
+    elif enemyX >= 736:
+        enemyX_change = -0.6
+        enemyY += enemyY_change
 
     # Bullet Movement
     if bulletY <= 0:
