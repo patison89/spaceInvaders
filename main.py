@@ -48,10 +48,13 @@ bulletX_change = 0
 bulletY_change = 7
 bullet_state = "ready"
 
+# Text
 score_value = 0
 font = pygame.font.Font('Optimus.otf', 32)
 textX = 10
 textY = 10
+
+game_over_font = pygame.font.Font('Optimus.otf', 64)
 
 
 def player(x, y):
@@ -77,8 +80,13 @@ def is_collision(enemyX, enemyY, bulletX, bulletY):
 
 
 def show_score(x, y):
-    score = font.render("Score: " + str(score_value), True, (255, 255, 255))
+    score = font.render('Score: ' + str(score_value), True, (255, 255, 255))
     screen.blit(score, (x, y))
+
+
+def game_over():
+    text = game_over_font.render('GAME OVER', True, (255, 255, 255))
+    screen.blit(text, (200, 250))
 
 
 # Game loop
@@ -116,6 +124,13 @@ while running:
 
     # Enemy Movement
     for i in range(num_of_enemies):
+
+        # Game over
+        if enemyY[i] > 440:
+            for j in range(num_of_enemies):
+                enemyY[j] = 2000
+            game_over()
+            break
         enemyX[i] += enemyX_change[i]
 
         if enemyX[i] <= 0:
