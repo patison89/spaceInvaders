@@ -35,7 +35,7 @@ num_of_enemies = 6
 
 for i in range(num_of_enemies):
     enemyImg.append(pygame.image.load('enemy.png'))
-    enemyX.append(random.randint(0, 760))
+    enemyX.append(random.randint(0, 736))
     enemyY.append(random.randint(0, 100))
     enemyX_change.append(0.6)
     enemyY_change.append(40)
@@ -55,6 +55,12 @@ textX = 10
 textY = 10
 
 game_over_font = pygame.font.Font('Optimus.otf', 64)
+
+# Music button
+musicImg = pygame.image.load('music-solid.png')
+musicX = 730
+musicY = 20
+music_paused = False
 
 
 def player(x, y):
@@ -87,6 +93,7 @@ def show_score(x, y):
 def game_over():
     text = game_over_font.render('GAME OVER', True, (255, 255, 255))
     screen.blit(text, (200, 250))
+    pygame.mixer.music.stop()
 
 
 # Game loop
@@ -95,6 +102,9 @@ while running:
 
     screen.fill((0, 0, 0))
     screen.blit(background, (0, 0))
+    screen.blit(musicImg, (musicX, musicY))
+    if music_paused:
+        pygame.draw.line(screen, (255, 255, 255), (musicX, musicY), (musicX + 32, musicY + 32), 5)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -110,6 +120,14 @@ while running:
                     bullet_sound.play()
                     bulletX = playerX
                     fire_bullet(bulletX, bulletY)
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+            if musicX <= pos[0] <= musicX + 32 and musicY <= pos[1] <= musicY + 32:
+                if music_paused:
+                    pygame.mixer.music.unpause()
+                else:
+                    pygame.mixer.music.pause()
+                music_paused = not music_paused
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -147,7 +165,7 @@ while running:
             bulletY = 480
             bullet_state = "ready"
             score_value += 1
-            enemyX[i] = random.randint(0, 760)
+            enemyX[i] = random.randint(0, 736)
             enemyY[i] = random.randint(0, 100)
 
         enemy(enemyX[i], enemyY[i], i)
